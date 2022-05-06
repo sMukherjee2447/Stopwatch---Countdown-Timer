@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" 
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<style>
+  .Time{
+    margin-left: 90px;
+  }
+  .label{
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+</style>
+<body>
+    
+    <div class="container" id="timer">
+        <div class="card text-center">
+            <div class="card-header">
+              <h4>Countdown Timer</h4>
+            </div>
+            <div class="card-body">
+                <h1 class="card-title" id="time">00:00:00</h1>
+
+                <form class="Time form-inline" id="input">
+                    <div class="form-group mb-2" >
+                      <label for="hours" class="label">Hour:</label>
+                      <input type="number" class="form-control" id="hours" placeholder="Hours" value="0">
+                      <label for="minutes" class="label">Minute:</label>
+                      <input type="number" class="form-control" id="minutes" placeholder="Minutes" value="0">
+                      <label for="seconds" class="label">Second:</label>
+                      <input type="number" class="form-control" id="seconds" placeholder="Seconds" value="0">
+                    </div>
+                  </form>
+
+                  <div class="buttons my-5">
+                    <button  onclick="start()" class="btn btn-success mb-2" id="start">Start Countdown  </button>
+                    <button  onclick="reset()" class="btn btn-success mb-2" id="reset">Reset  </button>
+                    <button  onclick="aud()" class="btn btn-success mb-2" id="reset">Stop Audio  </button>
+                </div>
+
+            </div>
+          </div>
+    </div>
+</body>
+<script>
+  //count down timer code
+  let started = document.getElementById("start");
+  let clear = document.getElementById("reset");
+
+  let h = document.getElementById("hours");
+  let m = document.getElementById("minutes");
+  let s = document.getElementById("seconds");
+
+  let hour = "0"+h.value;
+  let minute = "0"+m.value;
+  let second = "0"+s.value;
+
+  var audio = new Audio("audio.wav");
+
+
+  var startTimer = null;
+  var msg = "stopped";
+
+
+  function timer(){
+    if(h.value == 0 && m.value == 0 && s.value == 0){
+        h.value = 0;
+        m.value = 0;
+        s.value = 0;
+    } else if(s.value != 0){
+        s.value--;
+    } else if(m.value != 0 && s.value == 0){
+        m.value--;  
+        s.value = 59;
+    } else if(h.value != 0 && m.value == 0){
+        h.value--;
+        m.value = 60;
+    }
+
+    if(h.value<10 || h.value == 0){
+      hour = "0"+h.value;
+    } else {
+      hour = h.value
+    }
+
+    if(m.value<10 || m.value == 0){ 
+      minute = "0"+m.value;
+    } else {
+      minute = m.value
+    }
+
+    if(s.value<10){
+      second = "0"+s.value;
+    } else {
+      second = s.value
+    }
+    document.getElementById("time").innerHTML = hour+ ":" + minute + ":" + second;
+
+    if(h.value == 0 && m.value == 0 && s.value == 0){
+      audio.play();
+    }
+  }
+
+  function start(){
+      if(msg === "stopped"){
+      startTimer = window.setInterval(timer, 1000);
+      document.getElementById("start").innerHTML = "Stop Countdown";
+      msg ="started"
+    } else {
+        window.clearInterval(startTimer);
+        document.getElementById("start").innerHTML = "Start Countdown";
+        msg = "stopped";
+    }
+  }
+
+  function aud(){
+    audio.remove();
+  }
+
+  function reset(){
+    window.clearInterval(startTimer);
+    h.value = 0;
+    m.value = 0;
+    s.value = 0;
+    document.getElementById("time").innerHTML = "0"+h.value+ ":" + "0"+m.value + ":" + "0"+s.value;
+    audio.pause();
+    document.getElementById("start").innerHTML = "Start"
+  }
+
+  // function stop(){
+  //   clearInterval(startTimer);
+  // }
+
+</script>
+</html>
